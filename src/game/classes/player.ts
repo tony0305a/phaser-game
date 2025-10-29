@@ -51,7 +51,6 @@ export class Player {
         this.playerNameBubble = this.getScene().add.text(player.x,player.y-10,this.getName())
         player.setCollideWorldBounds(true)
         player.body.setGravity(0, this.getGravity())
-        console.log(this.colidesWith)
         for (let col of this.getColidesWith()) {
             this.getScene().physics.add.collider(player, col)
         }

@@ -1,7 +1,9 @@
 import { useRef, useState } from 'react';
 import { IRefPhaserGame, PhaserGame } from './PhaserGame';
 import { Game } from './game/scenes/Game';
-export var nome = ""
+export var player1 = ""
+let player1Joined = false
+export var player2 = ""
 
 function App() {
 
@@ -25,9 +27,15 @@ function App() {
         if (phaserRef.current) {
             const scene = phaserRef.current.scene as Game
             scene.join(playerName)
-            if(nome == ""){
-                nome = playerName
+            if(player1Joined){
+                player2 = playerName
             }
+            if(!player1Joined){
+                player1 = player1
+                player1 = playerName
+                player1Joined = true
+            }
+            
         }
     }
 

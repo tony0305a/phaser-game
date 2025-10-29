@@ -1,7 +1,7 @@
 import { Scene } from 'phaser';
 import { EventBus } from '../EventBus';
 import { Player } from '../classes/player';
-import { nome } from '../../App';
+import { player1, player2 } from '../../App';
 
 export class Game extends Scene {
     constructor() {
@@ -15,6 +15,7 @@ export class Game extends Scene {
     stars: Phaser.Physics.Arcade.Group;
     bombs: Phaser.Physics.Arcade.Group;
     plataforms: any;
+
     setPlayer(value: {
         instance: Phaser.Types.Physics.Arcade.SpriteWithDynamicBody;
         name: string;
@@ -109,6 +110,9 @@ export class Game extends Scene {
         this.setPlataforms(plataforms)
         this.setStars(stars)
         this.setBombs(bombs)
+
+
+
         EventBus.emit('current-scene-ready', this);
     }
     collectStar(player: any, star: any) {
@@ -135,8 +139,7 @@ export class Game extends Scene {
 
         }
     }
-    hitBomb(player: any, bomb: any) {
-        console.log(bomb)
+    hitBomb(player: any) {
         this.physics.pause()
         player.setTint(0xff0000)
         player.anims.play('turn')
@@ -144,13 +147,17 @@ export class Game extends Scene {
 
     update() {
         const cursors = this?.input?.keyboard?.createCursorKeys();
+        let keyW = this?.input?.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.W);
+        let keyA = this?.input?.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.A);
+        // let keyS = this?.input?.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.S);
+        let keyD = this?.input?.keyboard?.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         for (let player of this.getPlayer()) {
             var topLeft = player.bubble.getTopLeft().x
             var bottomRight = player.bubble.getBottomRight().x
             var nameOffset = (bottomRight - topLeft) / 2
             player.bubble.x = player.instance.x - nameOffset
             player.bubble.y = player.instance.y - 30
-            if (player.name == nome) {
+            if (player.name == player1) {
                 if (cursors?.left.isDown) {
                     player.instance.setVelocityX(-160);
                     player.instance.anims.play('left', true);
@@ -164,6 +171,23 @@ export class Game extends Scene {
                     player.instance.anims.play('turn')
                 }
                 if (cursors?.up.isDown && player.instance.body.touching.down) {
+                    player.instance.setVelocityY(-2000)
+                }
+            }
+            if (player.name == player2) {
+                if (keyA?.isDown) {
+                    player.instance.setVelocityX(-160);
+                    player.instance.anims.play('left', true);
+                }
+                else if (keyD?.isDown) {
+                    player.instance.setVelocityX(160)
+                    player.instance.anims.play('right', true)
+                }
+                else {
+                    player.instance.setVelocityX(0)
+                    player.instance.anims.play('turn')
+                }
+                if (keyW?.isDown && player.instance.body.touching.down) {
                     player.instance.setVelocityY(-2000)
                 }
             }
